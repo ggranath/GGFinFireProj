@@ -151,7 +151,7 @@ zip.cow <- MCMCglmm(VV_fruit ~ trait -1 + at.level(trait, 1):(fire*retention*mic
                 data=zero.dat, family = "zipoisson",  nitt = nitt, 
                 burnin = burnin, thin=thin, prior=prior, pr = TRUE, pl = TRUE)
 summary(zip.cow)
-# Gives a warning!! And contrasts are not straight forward to interpret.
+# Gives a warning! And contrasts are not straight forward to interpret.
 
 # Effect of vicinity of stumps on clearcuts
 exp(summary(zip.cow)$solutions[6,1]) # ca 22 times
