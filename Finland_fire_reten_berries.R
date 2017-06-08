@@ -35,7 +35,6 @@ zero.dat$nested_plot <- factor(with(zero.dat, paste(site, plot, sep= "_")) )
 # Plot raw data, but average within plots
 
 # At plot level and per m2 
-library(dplyr)
 dd <- zero.dat %>% 
   group_by(site, fire, retention, type, micro_hab.two) %>% 
   summarise_at(vars(VV_cover, VV_fruit, 
@@ -53,7 +52,7 @@ cow.prod.raw <- ggplot(data=dd, aes(y=VV_fruit, x=micro_hab.two.ed2, fill = fire
   scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
                     labels = c("unburned", "burned")) +
   facet_grid(~ retention, scales = "free", space = "free", 
-             labeller = as_labeller(c('cut' = "clearcut", 'elev' = "retention", 'full' = "unlogged"))) +
+             labeller = as_labeller(c('cut' = "logged", 'elev' = "retention", 'full' = "unlogged"))) +
   xlab("") +
   ylab(bquote("Berries per 0.16 m" ^2)) +
   theme(axis.text.x  = element_text(size=14, color="black"),
@@ -74,7 +73,7 @@ cow.prod.raw <- ggplot(data=dd, aes(y=VV_fruit, x=micro_hab.two.ed2, fill = fire
         panel.border = element_blank(),
         panel.background = element_blank()) +
   scale_x_discrete(breaks = c("flat", "tree", "flat.gr", "flat.open", "tree.gr", "tree.open", "flat", "tree"),
-                   labels=c("flat", "tree", "flat\npatch", "flat\ncut", "tree\npatch", "tree\ncut", "flat", "tree")) +
+                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) +
   annotation_custom(
     grob = textGrob(label = "a)", gp = gpar(fontsize = 20)),
     ymin = 113,      # Vertical position of the textGrob
@@ -90,7 +89,7 @@ bil.prod.raw <- ggplot(data=dd, aes(y=VM_fruit, x=micro_hab.two.ed2, fill = fire
   scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
                     labels = c("unburned", "burned"), guide=FALSE) +
   facet_grid(~ retention, scales = "free", space = "free", 
-             labeller = as_labeller(c('cut' = "clearcut", 'elev' = "retention", 'full' = "unlogged"))) +
+             labeller = as_labeller(c('cut' = "logged", 'elev' = "retention", 'full' = "unlogged"))) +
   xlab("") +
   ylab(bquote("Berries per 0.16 m" ^2)) +
   theme(axis.text.x  = element_text(size=14, color="black"),
@@ -109,7 +108,7 @@ bil.prod.raw <- ggplot(data=dd, aes(y=VM_fruit, x=micro_hab.two.ed2, fill = fire
         panel.border = element_blank(),
         panel.background = element_blank()) +
   scale_x_discrete(breaks = c("flat", "tree", "flat.gr", "flat.open", "tree.gr", "tree.open", "flat", "tree"),
-                   labels=c("flat", "tree", "flat\npatch", "flat\ncut", "tree\npatch", "tree\ncut", "flat", "tree")) +
+                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) +
   annotation_custom(
     grob = textGrob(label = "b)", gp = gpar(fontsize = 20)),
     ymin = 12,      # Vertical position of the textGrob
@@ -119,8 +118,8 @@ bil.gt <- ggplot_gtable(ggplot_build(bil.prod.raw))
 bil.gt$layout$clip[bil.gt$layout$name == "panel"] <- "off"
 grid.draw(bil.gt)
 
-# Plot Figure 2
-png("figure2_berries_raw.png", width=22, height=24, units="cm", res=300)
+# Plot Figure 1
+png("figure1_berries_raw.png", width=22, height=24, units="cm", res=300)
 grid.arrange(cow.gt , bil.gt, ncol=1, nrow =2)
 dev.off()
 
@@ -267,9 +266,9 @@ cow.fruit.logg.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned"))+
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("     clearcut    ")), gp=gpar(fontsize=16),rot=90), 
+  annotation_custom(grob = textGrob(label=bquote(underline("      logged     ")), gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -6.7, ymax = -6.7) +
-  annotation_custom(grob = textGrob(label=bquote(underline("retention (cut)")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("retention (logged)")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 2.75, xmax = 4.25, ymin = -6.7, ymax = -6.7)
 
@@ -339,7 +338,7 @@ cow.fruit.full.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned"))+
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE))  +
-  annotation_custom(grob = textGrob(label=bquote(underline(retention(patch))), gp=gpar(fontsize=16),rot=90), 
+  annotation_custom(grob = textGrob(label=bquote(underline(retention(unlogged))), gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -8.9, ymax = -8.9) +
   annotation_custom(grob = textGrob(label=bquote(underline("     unlogged    ")), 
                                     gp=gpar(fontsize=16),rot=90), 
@@ -482,10 +481,10 @@ bil.fruit.logg.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
          colour=guide_legend(reverse=TRUE)) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("     clearcut    ")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("      logged     ")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -6.7, ymax = -6.7) +
-  annotation_custom(grob = textGrob(label=bquote(underline("retention (cut)")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("retention (logged)")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 2.75, xmax = 4.25, ymin = -6.7, ymax = -6.7)
 
@@ -567,7 +566,7 @@ bil.fruit.full.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned")) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline(retention(patch))), 
+  annotation_custom(grob = textGrob(label=bquote(underline(retention(unlogged))), 
                                     gp=gpar(fontsize=16),rot=90), 
                   xmin = 0.75, xmax = 2.25, ymin = -8.9, ymax = -8.9) +
   annotation_custom(grob = textGrob(label=bquote(underline("     unlogged    ")), 
@@ -578,14 +577,14 @@ bil.fruit.full.p <- ggplotGrob(bil.fruit.full.p)
 bil.fruit.full.p$layout[grepl("panel", bil.fruit.full.p$layout$name), ]$clip <- "off"
 
 
-# Make figure 4
+# Make figure 3
 # Combine sub-test fruit plots
-fig4.g1 <- arrangeGrob(cow.fruit.logg.p)
-fig4.g2 <- arrangeGrob(cow.fruit.full.p)
-fig4.g3 <- arrangeGrob(bil.fruit.logg.p)
-fig4.g4 <- arrangeGrob(bil.fruit.full.p)
-png("figure4_logg_full_comp_fruit.png", width=32, height=30, units="cm", res=300)
-grid.arrange(fig4.g1, fig4.g2, fig4.g3, fig4.g4,
+fig3.g1 <- arrangeGrob(cow.fruit.logg.p)
+fig3.g2 <- arrangeGrob(cow.fruit.full.p)
+fig3.g3 <- arrangeGrob(bil.fruit.logg.p)
+fig3.g4 <- arrangeGrob(bil.fruit.full.p)
+png("figure3_logg_full_comp_fruit_update.png", width=32, height=30, units="cm", res=300)
+grid.arrange(fig3.g1, fig3.g2, fig3.g3, fig3.g4,
              ncol=2, nrow =2)
 dev.off()
 
@@ -646,7 +645,7 @@ cow.fruit.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
          colour=guide_legend(reverse=TRUE)) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("  clearcut  ")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("   logged   ")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -7.2, ymax = -7.2) +
   annotation_custom(grob = textGrob(label=bquote(underline("retention")), 
@@ -715,7 +714,7 @@ bil.fruit.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
          colour=guide_legend(reverse=TRUE)) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("  clearcut  ")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("   logged   ")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -7.2, ymax = -7.2) +
   annotation_custom(grob = textGrob(label=bquote(underline("retention")), 
@@ -923,7 +922,7 @@ cow.cov.p  <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
          colour=guide_legend(reverse=TRUE)) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("  clearcut  ")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("   logged   ")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -5.0, ymax = -5.0) +
   annotation_custom(grob = textGrob(label=bquote(underline("retention")), 
@@ -990,7 +989,7 @@ bil.cov.p  <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
          colour=guide_legend(reverse=TRUE)) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("  clearcut  ")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("   logged   ")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -5.0, ymax = -5.0) +
   annotation_custom(grob = textGrob(label=bquote(underline("retention")), 
@@ -1005,13 +1004,13 @@ bil.cov.p$layout[grepl("panel", bil.cov.p$layout$name), ]$clip <- "off"
 grid.draw(bil.cov.p)
 
 # Combine cover and fruit plots
-# Figure 3
-fig3.g1 <- arrangeGrob(cow.cov.p)
-fig3.g2 <- arrangeGrob(cow.fruit.p)
-fig3.g3 <- arrangeGrob(bil.cov.p)
-fig3.g4 <- arrangeGrob(bil.fruit.p)
-png("figure3_fruit_cover_plot.png", width=32, height=30, units="cm", res=300)
-grid.arrange(fig3.g1, fig3.g2, fig3.g3, fig3.g4,
+# Figure 2
+fig2.g1 <- arrangeGrob(cow.cov.p)
+fig2.g2 <- arrangeGrob(cow.fruit.p)
+fig2.g3 <- arrangeGrob(bil.cov.p)
+fig2.g4 <- arrangeGrob(bil.fruit.p)
+png("figure2_fruit_cover_plot.png", width=32, height=30, units="cm", res=300)
+grid.arrange(fig2.g1, fig2.g2, fig2.g3, fig2.g4,
              ncol=2, nrow =2)
 dev.off()
 
@@ -1104,9 +1103,9 @@ cow.cov.logg.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned"))+
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("     clearcut    ")), gp=gpar(fontsize=16),rot=90), 
+  annotation_custom(grob = textGrob(label=bquote(underline("      logged     ")), gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -3.7, ymax = -3.7) +
-  annotation_custom(grob = textGrob(label=bquote(underline("retention (cut)")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("retention (logged)")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 2.75, xmax = 4.25, ymin = -3.7, ymax = -3.7)
 
@@ -1166,9 +1165,9 @@ bil.cov.logg.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned"))+
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline("     clearcut    ")), gp=gpar(fontsize=16),rot=90), 
+  annotation_custom(grob = textGrob(label=bquote(underline("      logged     ")), gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -3.7, ymax = -3.7) +
-  annotation_custom(grob = textGrob(label=bquote(underline("retention (cut)")), 
+  annotation_custom(grob = textGrob(label=bquote(underline("retention (logged)")), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 2.75, xmax = 4.25, ymin = -3.7, ymax = -3.7)
 
@@ -1266,7 +1265,7 @@ cow.cov.full.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned"))+
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE))  +
-  annotation_custom(grob = textGrob(label=bquote(underline(retention(patch))), gp=gpar(fontsize=16),rot=90), 
+  annotation_custom(grob = textGrob(label=bquote(underline(retention(unlogged))), gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -6.7, ymax = -6.7) +
   annotation_custom(grob = textGrob(label=bquote(underline("     unlogged    ")), 
                                     gp=gpar(fontsize=16),rot=90), 
@@ -1329,7 +1328,7 @@ bil.cov.full.p <- ggplot(raw.means[,], aes(x=vars.plot, y=eff, fill=fire)) +
                     labels = c("unburned", "burned")) +
   guides(fill=guide_legend(reverse=TRUE),
          colour=guide_legend(reverse=TRUE)) +
-  annotation_custom(grob = textGrob(label=bquote(underline(retention(patch))), 
+  annotation_custom(grob = textGrob(label=bquote(underline(retention(unlogged))), 
                                     gp=gpar(fontsize=16),rot=90), 
                     xmin = 0.75, xmax = 2.25, ymin = -6.7, ymax = -6.7) +
   annotation_custom(grob = textGrob(label=bquote(underline("     unlogged    ")), 
@@ -1345,15 +1344,227 @@ grid.draw(bil.cov.full.p)
 
 # Combine sub-test cover plots
 # Figure 1 in Supplemental Material, SM1.
-sm1.g1 <- arrangeGrob(cow.cov.logg.p)
-sm1.g2 <- arrangeGrob(cow.cov.full.p)
-sm1.g3 <- arrangeGrob(bil.cov.logg.p)
-sm1.g4 <- arrangeGrob(bil.cov.full.p)
-png("figureSM1_logg_full_comp_cov.png", width=30, height=30, units="cm", res=300)
-grid.arrange(sm1.g1, sm1.g2, sm1.g3, sm1.g4,
+sm2.g1 <- arrangeGrob(cow.cov.logg.p)
+sm2.g2 <- arrangeGrob(cow.cov.full.p)
+sm2.g3 <- arrangeGrob(bil.cov.logg.p)
+sm2.g4 <- arrangeGrob(bil.cov.full.p)
+png("figureSM2_logg_full_comp_cov.png", width=30, height=30, units="cm", res=300)
+grid.arrange(sm2.g1, sm2.g2, sm2.g3, sm2.g4,
              ncol=2, nrow =2)
 dev.off()
 
+
+# Multifunctionality ####
+library(nlme) # for gls()
+library("AICcmodavg") # for predictSE.gls()
+library(boot) # for glm.diag()
+
+# function to get approx 95% CI
+glm.pred <- function(mod = NULL, new_dat = NULL) {
+  if(class(mod)[1] == "glm")
+        {pred <- predict(mod, new_dat, type = "response", se.fit = TRUE)}
+  if(class(mod)[1] == "gls")
+        {pred <- predictSE.gls(mod, new_dat, se.fit = TRUE)}
+  
+  new_dat$pred <-pred$fit
+  new_dat$pred.lo <- new_dat$pred-2*pred$se.fit
+  new_dat$pred.up <- new_dat$pred+2*pred$se.fit
+  intc <- new_dat$pred[1]
+  means <- round((new_dat$pred[2:6] / intc -1)*100)
+  lo <- round((new_dat$pred.lo[2:6] / intc -1)*100)
+  up <- round((new_dat$pred.up[2:6] / intc -1)*100)
+  return(data.frame(means, lo, up))
+}
+  
+
+# Berries
+# fix df dd from code in the begining
+VVberry <- aggregate(VV_fruit ~ site + fire + retention, dd, mean)
+VMberry <- aggregate(VM_fruit ~ site + fire + retention, dd, mean)
+
+# stats models
+# gls cowberry
+mod.VVberry.sr <- gls(VV_fruit ~ retention*fire, VVberry,
+                   weights=varIdent(form=~1|retention*fire))
+anova(mod.VVberry.sr)
+summary(mod.VVberry.sr)
+plot(mod.VVberry.sr)
+
+#gamma cowberry
+mod.VVberry.sr.gamma = glm(VV_fruit ~ retention*fire, VVberry,, family=Gamma(link = log) )
+summary(mod.VVberry.sr.gamma)
+plot(mod.VVberry.sr.gamma)
+leuk.diag <- glm.diag(mod.VVberry.sr.gamma)
+glm.diag.plots(mod.VVberry.sr.gamma, leuk.diag)
+
+# predict  cowberry changes
+new_dat <- unique(VVberry[, c("fire", "retention")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
+p.VVberry.gls <- glm.pred(mod=mod.VVberry.sr, new_dat=new_dat)
+p.VVberry.gamma <- glm.pred(mod=mod.VVberry.sr.gamma, new_dat=new_dat)
+
+# bilberry
+#gls bilberry
+mod.VMberry.sr <- gls(VM_fruit+0.1 ~ retention*fire, VMberry,
+                      weights=varIdent(form=~1|retention*fire))
+anova(mod.VMberry.sr)
+summary(mod.VMberry.sr)
+plot(mod.VMberry.sr)
+
+#gamma bilberry
+mod.VMberry.sr.gamma = glm(VM_fruit+0.1 ~ retention*fire, VMberry, family=Gamma(link = log) )
+summary(mod.VMberry.sr.gamma)
+plot(mod.VMberry.sr.gamma)
+leuk.diag <- glm.diag(mod.VMberry.sr.gamma)
+glm.diag.plots(mod.VMberry.sr.gamma, leuk.diag)
+
+# predict bilberry changes
+new_dat <- unique(VMberry[, c("fire", "retention")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
+p.VMberry.gls <- glm.pred(mod=mod.VMberry.sr, new_dat=new_dat)
+p.VMberry.gamma <- glm.pred(mod=mod.VMberry.sr.gamma, new_dat=new_dat)
+
+
+# pollinators
+poll <- read.csv("Rodriguez-Kouki-2017.csv")
+
+# get presence-absence for each site
+poll2 <- aggregate(poll[,5:112],by = list(poll$SITE,poll$RET,poll$FIRE), FUN=mean)
+poll2[, 4:111] <- ifelse(poll2[, 4:111]>0,1,0)
+
+poll2$sprich <- apply(poll2[,4:111], 1, sum)
+poll3 <- poll2[,c(1:3,112)]
+colnames(poll3)[1:3] <- c("site", "treat", "fire") 
+poll <- poll3[!(poll3$treat == "10"),] # remove 10% retention (not included in the berry data)
+poll <- droplevels(poll)
+
+# stats models
+# gls pollinators
+mod.poll.sr <- gls(sprich ~ treat*fire, poll,
+                    weights=varIdent(form=~1|treat*fire))
+anova(mod.poll.sr)
+summary(mod.poll.sr)
+plot(mod.poll.sr)
+
+# gamma pollinators
+mod.poll.sr.gamma = glm(sprich ~ treat*fire, poll, family=Gamma(link = log) )
+summary(mod.poll.sr.gamma)
+plot(mod.poll.sr.gamma)
+leuk.diag <- glm.diag(mod.poll.sr.gamma)
+glm.diag.plots(mod.poll.sr.gamma, leuk.diag)
+
+# predict pollinators changes
+new_dat <- unique(poll[, c("fire", "treat")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$treat),]
+p.poll.gls <- glm.pred(mod=mod.poll.sr, new_dat=new_dat)
+p.poll.gamma <- glm.pred(mod=mod.poll.sr.gamma, new_dat=new_dat)
+
+
+# insects
+insec <- read.csv("Heikkala-et-al-2016.csv")
+# remove 10% retention (not included in the berry data) and keep only the latest data (yr 2011)
+insec <- insec[!(insec$ret == "10") & insec$year == 2011,] 
+insec$fire <- relevel(insec$fire, ref = "U")
+insec <- droplevels(insec)
+
+# stats models
+# gls insects
+mod.insec.sr <- gls(SpecNumb ~ ret*fire, insec,
+                    weights=varIdent(form=~1|ret*fire))
+anova(mod.insec.sr)
+summary(mod.insec.sr)
+plot(mod.plant.sr)
+
+# gamma insects
+mod.insec.sr.gamma = glm(SpecNumb ~ ret*fire, insec, family=Gamma(link = log) )
+summary(mod.insec.sr.gamma)
+plot(mod.insec.sr.gamma)
+leuk.diag <- glm.diag(mod.insec.sr.gamma)
+glm.diag.plots(mod.insec.sr.gamma, leuk.diag)
+
+# predict insects changes
+new_dat <- unique(insec[, c("fire", "ret")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$ret),]
+p.insec.gls <- glm.pred(mod=mod.insec.sr, new_dat=new_dat)
+p.insec.gamma <- glm.pred(mod=mod.insec.sr.gamma, new_dat=new_dat)
+
+# plants
+plant <- read.csv("fin_exp_plant_rich.csv")
+
+# stats models
+# gls plant
+mod.plant.sr <- gls(plant_sr ~ retention*fire, plant,
+         weights=varIdent(form=~1|retention*fire))
+anova(mod.plant.sr)
+summary(mod.plant.sr)
+plot(mod.plant.sr)
+
+#gamma plant
+mod.plant.sr.gamma = glm(plant_sr ~ retention*fire, plant, family=Gamma(link = log) )
+summary(mod.plant.sr.gamma)
+plot(mod.plant.sr.gamma)
+leuk.diag <- glm.diag(mod.plant.sr.gamma)
+glm.diag.plots(mod.plant.sr.gamma, leuk.diag)
+
+# predict plant changes
+new_dat <- unique(plant[, c("fire", "retention")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
+p.plant.gls <- glm.pred(mod=mod.plant.sr, new_dat=new_dat)
+p.plant.gamma <- glm.pred(mod=mod.plant.sr.gamma, new_dat=new_dat)
+
+# gls bryo
+mod.bryo.sr <- gls(bryo_sr ~ retention*fire, plant,
+                    weights=varIdent(form=~1|retention*fire))
+anova(mod.bryo.sr)
+summary(mod.bryo.sr)
+plot(mod.bryo.sr)
+
+#gamma bryo
+mod.bryo.sr.gamma = glm(bryo_sr ~ retention*fire, plant, family=Gamma(link = log) )
+summary(mod.bryo.sr.gamma)
+plot(mod.bryo.sr.gamma)
+leuk.diag <- glm.diag(mod.bryo.sr.gamma)
+glm.diag.plots(mod.bryo.sr.gamma, leuk.diag)
+
+# predict bryo changes
+new_dat <- unique(plant[, c("fire", "retention")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
+p.bryo.gls <- glm.pred(mod=mod.bryo.sr, new_dat=new_dat)
+p.bryo.gamma <- glm.pred(mod=mod.bryo.sr.gamma, new_dat=new_dat)
+
+# gls lichen
+mod.lichen.sr <- gls(lichen_sr ~ retention*fire, plant,
+                   weights=varIdent(form=~1|retention*fire))
+anova(mod.lichen.sr)
+summary(mod.lichen.sr)
+plot(mod.lichen.sr)
+
+#gamma lichen
+mod.lichen.sr.gamma = glm(lichen_sr ~ retention*fire, plant, family=Gamma(link = log) )
+summary(mod.lichen.sr.gamma)
+plot(mod.lichen.sr.gamma)
+leuk.diag <- glm.diag(mod.lichen.sr.gamma)
+glm.diag.plots(mod.lichen.sr.gamma, leuk.diag)
+
+# predict lichen changes
+new_dat <- unique(plant[, c("fire", "retention")])
+new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
+p.lichen.gls <- glm.pred(mod=mod.lichen.sr, new_dat=new_dat)
+p.lichen.gamma <- glm.pred(mod=mod.lichen.sr.gamma, new_dat=new_dat)
+
+multi.table <- cbind(p.VVberry.gamma, p.VMberry.gamma, p.poll.gamma,
+     p.insec.gamma, p.plant.gamma, p.bryo.gamma, p.lichen.gamma)
+coln <- c("cowberry","lo","up", "bilberry","lo","up", "pollinators","lo","up",
+         "beetles","lo","up", "vasc plants","lo","up", "bryophytes","lo","up", "lichens","lo","up")
+colnames(multi.table) <- coln
+write.csv(multi.table, "multi_table.csv")
+
+# Plot multi table....not completed
+# multi.table2 <- expand.grid(retention=levels(zero.dat$retention), fire = levels(zero.dat$fire))
+# multi.table2 <- cbind(multi.table2, matrix(NA, ncol=ncol(multi.table), nrow = nrow(multi.table2))) 
+# multi.table2[-1,3:ncol(multi.table2)] <- multi.table
+# colnames(multi.table2)[3:ncol(multi.table2)] <- colnames(multi.table)
+# multi.table2[1,3:ncol(multi.table2)] <- 0
 
 
 # Modell checking extras ####
