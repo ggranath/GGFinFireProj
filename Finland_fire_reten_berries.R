@@ -1709,6 +1709,7 @@ p.VMberry.gls <- glm.pred(mod=mod.VMberry.sr, new_dat=new_dat)
 p.VMberry.gamma <- glm.pred(mod=mod.VMberry.sr.gamma, new_dat=new_dat)
 
 
+
 # pollinators
 poll <- read.csv("Rodriguez-Kouki-2017-sprich.csv")
 poll <- merge(poll, env.var, by="site")
