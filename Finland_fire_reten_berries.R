@@ -1,7 +1,7 @@
 ################################################################################################
 # R code to reproduce results in 
-# Strengbom et al. 
-# Submitted to Conservation Biology
+# Granath et al. 
+# Submitted to Journal of Applied Ecology
 # Contact: Gustaf.Granath@gmail.com
 #################################################################################################
 
