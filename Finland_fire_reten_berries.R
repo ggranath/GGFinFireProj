@@ -13,180 +13,15 @@ library(gridExtra)
 library(grid)
 
 # Pre-experiment vegetation conditions ####
+# test for using pre-exp cover of shrubs as covariate can be found
+# under "Experiment effects - bilberry/cowberry"
 library(readxl)
 veg <- read_xlsx("raw_data_vegetationcover.xlsx")
 veg <- veg[!(veg$retention == "ten"),] # remove lower retention level
 veg <- veg[veg$year == "y2000"| veg$year == "y2011",] # select pre-experiment and 2011 data
 
-# Calculate mean values for some environmental variables that can be tested in the 
-# multifunctionality section
-env.var <- aggregate(cbind(humus,tot_litter, fallen_trees,trunks_living) ~ site, veg[veg$year == "y2011",], mean)
-
-# test differences between treatments for these environmental variables
-env.var.test <- aggregate(cbind(humus,tot_litter, fallen_trees,trunks_living) ~ site+fire+retention, 
-                          veg[veg$year == "y2011",], mean)
-mod1 <- lm(log(humus+1)~fire*retention, env.var.test)
-summary(mod1)
-plot(mod1)
-
-mod2 <- lm(tot_litter~fire*retention, env.var.test)
-summary(mod2)
-plot(mod2)
-
-# plot these variables
-humus.raw <- ggplot(data=env.var.test, aes(y=humus, x=retention, fill = fire)) +
-  geom_point(shape = 21, size=2, position=position_jitterdodge(jitter.width=0.40,dodge.width=0)) +
-  scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
-                    labels = c("unburned", "burned")) +
-  xlab("") +
-  ylab(bquote("Organic soil depth (mm)" ^2)) +
-  theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
-        axis.title = element_text(size=14),
-        strip.text.x = element_text(size = 14),
-        legend.text = element_text(size=16),
-        legend.title = element_blank(),
-        legend.position= c(0.9,0.9),
-        legend.key = element_blank(),
-        legend.background = element_rect(color = "black", 
-                                         fill = "white", size = 0.7, linetype = "solid"),
-        axis.line.x = element_line(color="black", size = 0.8),
-        axis.line.y = element_line(color="black", size = 0.8),
-        axis.line = element_line(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        panel.background = element_blank()) +
-  scale_x_discrete(breaks = c("clearcut", "fifty", "full"),
-                   labels=c("logged", "retention", "unlogged")) +
-  annotation_custom(
-    grob = textGrob(label = "a)", gp = gpar(fontsize = 20)),
-    ymin = 80,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -2.5)
-humus.gt <- ggplot_gtable(ggplot_build(humus.raw))
-humus.gt$layout$clip[humus.gt$layout$name == "panel"] <- "off"
-grid.draw(humus.gt)
-
-litter.raw <- ggplot(data=env.var.test, aes(y=tot_litter, x=retention, fill = fire)) +
-  geom_point(shape = 21, size=2, position=position_jitterdodge(jitter.width=0.40,dodge.width=0)) +
-  scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
-                    labels = c("unburned", "burned")) +
-  xlab("") +
-  ylab("Litter") +
-  theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
-        axis.title = element_text(size=14),
-        strip.text.x = element_text(size = 14),
-        legend.text = element_text(size=16),
-        legend.title = element_blank(),
-        legend.position= c(0.2,0.9),
-        legend.key = element_blank(),
-        legend.background = element_rect(color = "black", 
-                                         fill = "white", size = 0.7, linetype = "solid"),
-        axis.line.x = element_line(color="black", size = 0.8),
-        axis.line.y = element_line(color="black", size = 0.8),
-        axis.line = element_line(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        panel.background = element_blank()) +
-  scale_x_discrete(breaks = c("clearcut", "fifty", "full"),
-                   labels=c("logged", "retention", "unlogged")) +
-  annotation_custom(
-    grob = textGrob(label = "b)", gp = gpar(fontsize = 20)),
-    ymin = 80,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -2.5)
-litter.gt <- ggplot_gtable(ggplot_build(litter.raw))
-litter.gt$layout$clip[litter.gt$layout$name == "panel"] <- "off"
-grid.draw(litter.gt)
-
-fallen.raw <- ggplot(data=env.var.test, aes(y=fallen_trees, x=retention, fill = fire)) +
-  geom_point(shape = 21, size=2, position=position_jitterdodge(jitter.width=0.40,dodge.width=0)) +
-  scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
-                    labels = c("unburned", "burned")) +
-  xlab("") +
-  ylab("Fallen trees") +
-  theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
-        axis.title = element_text(size=14),
-        strip.text.x = element_text(size = 14),
-        legend.text = element_text(size=16),
-        legend.title = element_blank(),
-        legend.position= c(0.2,0.9),
-        legend.key = element_blank(),
-        legend.background = element_rect(color = "black", 
-                                         fill = "white", size = 0.7, linetype = "solid"),
-        axis.line.x = element_line(color="black", size = 0.8),
-        axis.line.y = element_line(color="black", size = 0.8),
-        axis.line = element_line(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        panel.background = element_blank()) +
-  scale_x_discrete(breaks = c("clearcut", "fifty", "full"),
-                   labels=c("logged", "retention", "unlogged")) +
-  annotation_custom(
-    grob = textGrob(label = "c)", gp = gpar(fontsize = 20)),
-    ymin = 4,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -2.5)
-fallen.gt <- ggplot_gtable(ggplot_build(fallen.raw))
-fallen.gt$layout$clip[fallen.gt$layout$name == "panel"] <- "off"
-grid.draw(fallen.gt)
-
-
-living.raw <- ggplot(data=env.var.test, aes(y=trunks_living, x=retention, fill = fire)) +
-  geom_point(shape = 21, size=2, position=position_jitterdodge(jitter.width=0.40,dodge.width=0)) +
-  scale_fill_manual(breaks = c("no", "yes"), values = c("no" = "white", "yes" = "black"),
-                    labels = c("unburned", "burned")) +
-  xlab("") +
-  ylab("Living trees") +
-  theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
-        axis.title = element_text(size=14),
-        strip.text.x = element_text(size = 14),
-        legend.text = element_text(size=16),
-        legend.title = element_blank(),
-        legend.position= c(0.9,0.9),
-        legend.key = element_blank(),
-        legend.background = element_rect(color = "black", 
-                                         fill = "white", size = 0.7, linetype = "solid"),
-        axis.line.x = element_line(color="black", size = 0.8),
-        axis.line.y = element_line(color="black", size = 0.8),
-        axis.line = element_line(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        panel.background = element_blank()) +
-  scale_x_discrete(breaks = c("clearcut", "fifty", "full"),
-                   labels=c("logged", "retention", "unlogged")) +
-  annotation_custom(
-    grob = textGrob(label = "d)", gp = gpar(fontsize = 20)),
-    ymin = 0.15,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -2.5)
-living.gt <- ggplot_gtable(ggplot_build(living.raw))
-living.gt$layout$clip[living.gt$layout$name == "panel"] <- "off"
-grid.draw(living.gt)
-
-#########################################################################################
-# Simple test if cover yr 2000 should be used as a covariate
-#veg.com <- veg
-#veg.com$treat.rep <- paste(veg.com$fire, veg.com$retention, veg.com$site) # replicates
-# billberry
-#sub.bil <- aggregate(vacc_myrt ~ treat.rep + fire + retention + year, veg.com, mean) # mean per replicate
-#sub.bil.wide <- reshape(sub.bil, v.names = "vacc_myrt", idvar = "treat.rep", timevar = "year", direction = "wide")
-#summary(lm(vacc_myrt.y2011 ~ vacc_myrt.y2000 + fire*retention, sub.bil.wide)) # NO
-#cowberry
-#sub.cow <- aggregate(vacc_viti ~ treat.rep + fire + retention + year, veg.com, mean)
-#sub.cow.wide <- reshape(sub.cow, v.names = "vacc_viti", idvar = "treat.rep", timevar = "year", direction = "wide")
-#summary(lm(vacc_viti.y2011 ~ vacc_viti.y2000 + fire*retention, sub.cow.wide)) # NO
-########################################################################################
-
 # check bilberry and cowberry start values
-veg.com <- veg.com[veg.com$year == "y2011",]
+veg.com <- veg.com[veg.com$year == "y2000",]
 veg.com$treat <- paste(veg.com$fire, veg.com$retention) # treatments
 veg.com$treat.rep <- paste(veg.com$fire, veg.com$retention, veg.com$site) # replicates
 #bilberry
@@ -1637,35 +1472,11 @@ glm.pred <- function(mod = NULL, new_dat = NULL) {
 # save data frame dd in the begining of this script
 VVcover <- aggregate(VV_cover ~ site + fire + retention, dd, mean)
 VMcover <- aggregate(VM_cover ~ site + fire + retention, dd, mean)
-VVcover <- merge(VVcover, env.var, by="site")
-VMcover <- merge(VMcover, env.var, by="site")
-
-# correlations
-pairs(VVcover)
-pairs(VMcover)
-# not clear correlation but lets runt the models
-summary(lm(VV_cover ~ humus + fallen_trees + trunks_living, VVcover))
-summary(lm(VM_cover ~ humus + fallen_trees + trunks_living, VMcover))
-# not bivariate distributions though so lets go non-parametric for humus 
-# that seems to show a correlation
-cor.test(VVcover$VV_cover,VVcover$humus, method = "spearman")
-cor.test(VMcover$VM_cover,VMcover$humus, method = "spearman")
 
 # Berries
 # save data frame dd in the begining of this script
 VVberry <- aggregate(VV_fruit ~ site + fire + retention, dd, mean)
 VMberry <- aggregate(VM_fruit ~ site + fire + retention, dd, mean)
-VVberry <- merge(VVberry, env.var, by="site")
-VMberry <- merge(VMberry, env.var, by="site")
-
-# stats models
-# correlations
-pairs(VVberry)
-pairs(VMberry)
-summary(lm(VV_fruit ~ humus + fallen_trees + trunks_living, VVberry))
-summary(lm(VM_fruit ~ humus + fallen_trees + trunks_living, VMberry))
-cor.test(VVberry$VV_fruit,VVberry$humus, method = "spearman")
-cor.test(VMberry$VM_fruit,VMberry$humus, method = "spearman")
 
 # gls cowberry
 mod.VVberry.sr <- gls(VV_fruit ~ retention*fire, VVberry,
@@ -1709,21 +1520,14 @@ p.VMberry.gls <- glm.pred(mod=mod.VMberry.sr, new_dat=new_dat)
 p.VMberry.gamma <- glm.pred(mod=mod.VMberry.sr.gamma, new_dat=new_dat)
 
 
-
 # pollinators
 poll <- read.csv("Rodriguez-Kouki-2017-sprich.csv")
-poll <- merge(poll, env.var, by="site")
 
 # richness means
 poll.rich.means <- aggregate(sprich ~ treat + fire, poll, mean)
 poll.rich.means$sprich.sd <- aggregate(sprich ~ treat + fire, poll, sd)$sprich
 
 # stats models
-# correlations
-pairs(poll)
-summary(lm(sprich ~ humus + fallen_trees + trunks_living, poll))
-cor.test(poll$sprich,poll$humus, method = "spearman")
-
 # gls pollinators
 mod.poll.sr <- gls(sprich ~ treat*fire, poll,
                     weights=varIdent(form=~1|treat*fire))
@@ -1747,18 +1551,12 @@ p.poll.gamma <- glm.pred(mod=mod.poll.sr.gamma, new_dat=new_dat)
 
 # insects
 insec <- read.csv("Heikkala-et-al-2016-sprich.csv")
-insec <- merge(insec, env.var, by="site")
 
 # richness means
 beetle.rich.means <- aggregate(SpecNumb ~ ret + fire, insec, mean)
 beetle.rich.means$SpecNumb.sd <- aggregate(SpecNumb ~ ret + fire, insec, sd)$SpecNumb
 
 # stats models
-# correlations
-pairs(insec)
-summary(lm(SpecNumb ~ humus + fallen_trees + trunks_living, insec))
-cor.test(insec$SpecNum,insec$humus, method = "spearman")
-
 # gls insects
 mod.insec.sr <- gls(SpecNumb ~ ret*fire, insec,
                     weights=varIdent(form=~1|ret*fire))
@@ -1781,7 +1579,6 @@ p.insec.gamma <- glm.pred(mod=mod.insec.sr.gamma, new_dat=new_dat)
 
 # plants
 plant <- read.csv("fin_exp_plant_rich.csv")
-plant <- merge(plant, env.var, by.x="site.id", by.y = "site")
 
 # richness means
 #vasc plants
@@ -1792,11 +1589,6 @@ plant.rich.means <- plant.rich.means[,c(1,2,3,6,4,7,5,8)]
 colnames(plant.rich.means)[c(4,6,8)] <- c("plant_sr.sd", "bryo_sr.sd", "lichen_sr.sd")
          
 # stats models
-# correlations plants
-pairs(plant)
-summary(lm(plant_sr ~ humus + fallen_trees + trunks_living, plant))
-cor.test(plant$plant_sr,plant$humus, method = "spearman")
-
 # gls plant
 mod.plant.sr <- gls(plant_sr ~ retention*fire, plant,
          weights=varIdent(form=~1|retention*fire))
@@ -1817,11 +1609,6 @@ new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
 p.plant.gls <- glm.pred(mod=mod.plant.sr, new_dat=new_dat)
 p.plant.gamma <- glm.pred(mod=mod.plant.sr.gamma, new_dat=new_dat)
 
-# correlations bryo
-pairs(plant)
-summary(lm(bryo_sr ~ humus + fallen_trees + trunks_living, plant))
-cor.test(plant$bryo_sr,plant$humus, method = "spearman")
-
 # gls bryo
 mod.bryo.sr <- gls(bryo_sr ~ retention*fire, plant,
                     weights=varIdent(form=~1|retention*fire))
@@ -1841,11 +1628,6 @@ new_dat <- unique(plant[, c("fire", "retention")])
 new_dat <- new_dat[order(new_dat$fire, new_dat$retention),]
 p.bryo.gls <- glm.pred(mod=mod.bryo.sr, new_dat=new_dat)
 p.bryo.gamma <- glm.pred(mod=mod.bryo.sr.gamma, new_dat=new_dat)
-
-# correlations bryo
-pairs(plant)
-summary(lm(lichen_sr ~ humus + fallen_trees + trunks_living, plant))
-cor.test(plant$lichen_sr,plant$humus, method = "spearman")
 
 # gls lichen
 mod.lichen.sr <- gls(lichen_sr ~ retention*fire, plant,
