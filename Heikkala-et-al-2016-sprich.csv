@@ -11,9 +11,9 @@ site,year,fire,ret,SpecNumb
 21,2011,no,0,60
 22,2011,yes,0,57
 23,2011,no,50,78
-30,2011,yes,C,103
-31,2011,yes,C,101
-32,2011,yes,C,129
-33,2011,no,C,68
-34,2011,no,C,93
-35,2011,no,C,81
+30,2011,yes,control,103
+31,2011,yes,control,101
+32,2011,yes,control,129
+33,2011,no,control,68
+34,2011,no,control,93
+35,2011,no,control,81
