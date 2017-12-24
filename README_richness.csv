@@ -1,0 +1,27 @@
+Meta data,
+,
+FILE NAME = Granathetal_richness.csv,
+Location,"WGS84: 63.166667, 30.666667"
+Biome,boreal
+Sampling date,"2011,2013"
+Experimental design,Factorial (fire x retention) with 3 replicates.
+Treatment size,3-4 ha
+Sampling method,pollinators: 500-mL colored pan traps with a surface area of 0.47 m2 (4 times over the season)
+,"saproxylic beetles: flight-interception traps, two crossed plastic panes (40 cm×60 cm), May-September"
+,vegetation: 2 x 2 m frame
+Original publications:,"pollinators: Rodríguez A, Kouki J. 2015. Emulating natural disturbance in forest management enhances pollination services for dominant Vaccinium shrubs in boreal pine-dominated forests. Forest Ecology and Management 350:1–12."
+,"saproxylic beetles: Heikkala O, Martikainen P, Kouki J. 2016. Decadal effects of emulating natural disturbances in forest management on saproxylic beetle assemblages. Biological Conservation 194:39-47"
+,"vegetation: Johnson S, Strengbom, J, Kouki J. 2014. Low levels of tree retention do not mitigate the effects of clearcutting on ground vegetation dynamics. Forest Ecology and Management 330:67–74"
+,
+Column name,Description
+site,experiment site id
+fire,"pre-scribed fire treatment (yes = burned, no = unburned)"
+retention,"retention level treatment (0 = logged, 0% of the pre-harvest tree volume retained; 50 = elevated retention, 17.4% retained, ~50 m3 ha-1; control = unlogged, i.e.100% retained)"
+year_sap_beetles,Year saproxylic beetles were samples (May-September)
+sap_beetles_sr,Total number of species (saproxylic beetles)
+year_pollinators,Year pollinators (bees and hoverflies) were samples
+pollinators_sr,Total number of species (bees and hoverflies)
+year_vegetation,Year vegetation was sampled
+plant_sr,Total number of species (vascular plants)
+bryo_sr,Total number of species (bryophytes)
+lichen_sr,Total number of species (lichens)

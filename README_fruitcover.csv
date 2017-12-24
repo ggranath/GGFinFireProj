@@ -1,0 +1,23 @@
+Meta data,
+,
+FILE NAME = Granathetal_fire_reten_fruitcover.csv,
+Location,"WGS84: 63.166667, 30.666667"
+Biome,boreal
+Sampling date,mid-July 2012
+Experimental design,Factorial (fire x retention) with 3 replicates. Microhabitat sampling is paired (plot) and nested in treatment. Groups of trees (type) nested in treatment retention. 
+Treatment size,3-4 ha
+Sampling size,0.4 x 0.4 m
+,
+Column name,Description
+site,experiment site id
+fire,"pre-scribed fire treatment (yes = burned, no = unburned)"
+retention,"retention level treatment (no = logged, 0% of the pre-harvest tree volume retained; elev = elevated retention, 17.4% retained, ~50 m3 ha-1; full = unlogged, i.e.100% retained)"
+transect,"transect within plot or if sub-plots where sampled within retention group (gr) , north of retention group (N) or south of retention group (S) "
+type,type of treatment (open = logged (clearcut or logged in elevated retention); gr = group of trees (full retention or within elevated retention)    
+plot,Sub-plot (paired tree – flat area sampling) within each replicate (i.e. site)
+micro_hab,"Microhabitat (N = north of tree/stump, S = south of tree/stump, P = flat ground)"
+VM_cover,Plant cover of Vaccinium myrtillus. Number of grid cells with the species present in a 0.4 x 0.4 m frame
+VV_cover,Plant cover of Vaccinium vitis-idaea. Number of grid cells with the species present in a 0.4 x 0.4 m frame
+total_cover,Total number of grid cells in the 0.4 x 0.4 m frame
+VM_fruit,Number of fruits in a 0.4 x 0.4 m frame on plants roted in the frame
+VV_fruit,Number of fruits in a 0.4 x 0.4 m frame on plants roted in the frame
