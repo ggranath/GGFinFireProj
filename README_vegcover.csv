@@ -7,6 +7,8 @@ Sampling date,"2000, 2003, 20011"
 Experimental design,Factorial (fire x retention) with 3 replicates. Microhabitat sampling is paired (plot) and nested in treatment. Groups of trees (type) nested in treatment retention. 
 Treatment size,3-4 ha
 Sampling method,2 x 2 m frame
+Species,"ground living vascular plants, macrolichens and bryophytes
+(mosses and liverworts). Dead wood, bark and rock excluded."
 Nomenclature,"vascular plants = Karlsson 1998, bryophytes = Hallingbäck et al. 2006, lichens = Santesson et al. 2004"
 Original publication,"Johnson S, Strengbom, J, Kouki J. 2014. Low levels of tree retention do not mitigate the effects of clearcutting on ground vegetation dynamics. Forest Ecology and Management 330:67–74"
 ,
@@ -16,16 +18,16 @@ subplot,Sub-sampling within treatment (i.e. site)
 fire,"pre-scribed fire treatment (yes = burned, no = unburned)"
 retention,"retention level treatment (zero = logged, 0% of the pre-harvest tree volume retained; ten = low retention, 3.5% retained, ~10 m3 ha-1; fifty = elevated retention, 17.4% retained, ~50 m3 ha-1; full = unlogged, i.e.100% retained)"
 year,Year of survey.
-bet_pube_bs,species cover (percent)
-bet_pend_bs,species cover (percent)
-alnu_inc_bs,species cover (percent)
-pice_abie_bs,species cover (percent)
-pinu_sylv_bs,species cover (percent)
-juni_comm_bs,species cover (percent)
-sali_capr_bs,species cover (percent)
-sali_phyl_bs,species cover (percent)
-sali_star_bs,species cover (percent)
-sorb_aucu_bs,species cover (percent)
+bet_pube_bs,species cover (percent). Tree: cover below 1.5m
+bet_pend_bs,species cover (percent). Tree: cover below 1.5m
+alnu_inc_bs,species cover (percent). Tree: cover below 1.5m
+pice_abie_bs,species cover (percent). Tree: cover below 1.5m
+pinu_sylv_bs,species cover (percent). Tree: cover below 1.5m
+juni_comm_bs,species cover (percent). Tree: cover below 1.5m
+sali_capr_bs,species cover (percent). Tree: cover below 1.5m
+sali_phyl_bs,species cover (percent). Tree: cover below 1.5m
+sali_star_bs,species cover (percent). Tree: cover below 1.5m
+sorb_aucu_bs,species cover (percent). Tree: cover below 1.5m
 agro_capi,species cover (percent)
 agro_giga,species cover (percent)
 alnu_inc,species cover (percent)
