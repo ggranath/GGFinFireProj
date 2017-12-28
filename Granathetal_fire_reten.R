@@ -76,7 +76,7 @@ cow.prod.raw <- ggplot(data=dd, aes(y=VV_fruit, x=micro_hab.two.ed2, fill = fire
         strip.text.x = element_text(size = 14),
         legend.text = element_text(size=16),
         legend.title = element_blank(),
-        legend.position= c(0.9,0.9),
+        legend.position= c(0.9,0.85),
         legend.key = element_blank(),
         legend.background = element_rect(color = "black", 
                                          fill = "white", size = 0.7, linetype = "solid"),
@@ -134,6 +134,10 @@ bil.gt$layout$clip[bil.gt$layout$name == "panel"] <- "off"
 grid.draw(bil.gt)
 
 # save Figure 1
+#pdf("figure1_berries_pdf.pdf", width=8.25, height=9)
+#grid.arrange(cow.gt , bil.gt, ncol=1, nrow =2)
+#dev.off()
+
 png("figure1_berries_raw.png", width=22, height=24, units="cm", res=300)
 grid.arrange(cow.gt , bil.gt, ncol=1, nrow =2)
 dev.off()
