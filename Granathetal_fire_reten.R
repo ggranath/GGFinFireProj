@@ -71,7 +71,7 @@ cow.prod.raw <- ggplot(data=dd, aes(y=VV_fruit, x=micro_hab.two.ed2, fill = fire
   xlab("") +
   ylab(bquote("Berries per 0.16 m" ^2)) +
   theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
+        axis.text.y  = element_text(size=15, color="black", margin = margin(l = 1, r=5)),
         axis.title = element_text(size=14),
         strip.text.x = element_text(size = 14),
         legend.text = element_text(size=16),
@@ -88,12 +88,12 @@ cow.prod.raw <- ggplot(data=dd, aes(y=VV_fruit, x=micro_hab.two.ed2, fill = fire
         panel.border = element_blank(),
         panel.background = element_blank()) +
   scale_x_discrete(breaks = c("flat", "tree", "flat.gr", "flat.open", "tree.gr", "tree.open", "flat", "tree"),
-                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) +
-  annotation_custom(
-    grob = textGrob(label = "a)", gp = gpar(fontsize = 20)),
-    ymin = 113,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -16)
+                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) 
+
+ann_text <- data.frame(VV_fruit = 93, micro_hab.two.ed2 = "flat",lab = "(a)",
+                       retention = factor("cut",levels = levels(dd$retention)))
+cow.prod.raw <- cow.prod.raw + geom_text(data = ann_text,aes(fill=NULL),label = "(a)", size=8)
+
 cow.gt <- ggplot_gtable(ggplot_build(cow.prod.raw))
 cow.gt$layout$clip[cow.gt$layout$name == "panel"] <- "off"
 grid.draw(cow.gt)
@@ -108,7 +108,7 @@ bil.prod.raw <- ggplot(data=dd, aes(y=VM_fruit, x=micro_hab.two.ed2, fill = fire
   xlab("") +
   ylab(bquote("Berries per 0.16 m" ^2)) +
   theme(axis.text.x  = element_text(size=14, color="black"),
-        axis.text.y  = element_text(size=14, color="black"),
+        axis.text.y  = element_text(size=15, color="black", margin = margin(l = 17, r=5)),
         axis.title = element_text(size=14),
         strip.text.x = element_text(size = 14),
         legend.text = element_text(size=16),
@@ -123,12 +123,12 @@ bil.prod.raw <- ggplot(data=dd, aes(y=VM_fruit, x=micro_hab.two.ed2, fill = fire
         panel.border = element_blank(),
         panel.background = element_blank()) +
   scale_x_discrete(breaks = c("flat", "tree", "flat.gr", "flat.open", "tree.gr", "tree.open", "flat", "tree"),
-                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) +
-  annotation_custom(
-    grob = textGrob(label = "b)", gp = gpar(fontsize = 20)),
-    ymin = 12,      # Vertical position of the textGrob
-    #  ymax = 5,
-    xmin = -15.5)
+                   labels=c("flat", "tree", "flat\nunlogged", "flat\nlogged", "tree\nunlogged", "tree\nlogged", "flat", "tree")) 
+ann_text <- data.frame(VM_fruit = 10.5, micro_hab.two.ed2 = "flat",lab = "(b)",
+                       retention = factor("cut",levels = levels(dd$retention)))
+bil.prod.raw <- bil.prod.raw + geom_text(data = ann_text,aes(fill=NULL),label = "(b)", size=8)
+
+
 bil.gt <- ggplot_gtable(ggplot_build(bil.prod.raw))
 bil.gt$layout$clip[bil.gt$layout$name == "panel"] <- "off"
 grid.draw(bil.gt)
